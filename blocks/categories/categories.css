@@ -1,0 +1,103 @@
+/* "Categories" light-gray title bar directly above the block, in the same section */
+.categories-container h1,
+.categories-container h2 {
+  max-width: 1200px;
+  margin: 24px auto 16px;
+  padding: 16px 24px;
+  border-radius: 8px;
+  background: #f2f2f2;
+  font-size: 28px;
+}
+
+.categories {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto 24px;
+  padding: 0 16px;
+}
+
+.categories-scroller {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.categories-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.categories-track {
+  display: flex;
+  gap: 24px;
+  margin: 0;
+  padding: 4px 0 8px;
+  list-style: none;
+}
+
+.categories-item {
+  flex: 0 0 130px;
+  scroll-snap-align: start;
+  text-align: center;
+}
+
+.categories-item-image {
+  aspect-ratio: 1;
+  margin-bottom: 8px;
+}
+
+.categories-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.categories-item-label p,
+.categories-item-label a {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.categories-arrow {
+  display: none;
+}
+
+@media (width >= 900px) {
+  .categories-item {
+    flex-basis: 160px;
+  }
+
+  .categories-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0;
+    border: 0;
+    border-radius: 50%;
+    padding: 0;
+    background: #fff;
+    color: var(--link-color);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+    cursor: pointer;
+  }
+
+  .categories-arrow svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .categories-prev {
+    left: -4px;
+  }
+
+  .categories-next {
+    right: -4px;
+  }
+}

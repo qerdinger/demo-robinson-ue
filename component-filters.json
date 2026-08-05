@@ -37,6 +37,12 @@
     ]
   },
   {
+    "id": "categories",
+    "components": [
+      "category"
+    ]
+  },
+  {
     "id": "columns",
     "components": [
       "column"
