@@ -142,6 +142,17 @@
     ]
   },
   {
+    "id": "action",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text"
+      }
+    ]
+  },
+  {
     "id": "card",
     "fields": [
       {

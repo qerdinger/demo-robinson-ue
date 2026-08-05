@@ -1,0 +1,57 @@
+/* quick-action buttons row (Medsubscribe / Consult a Pharmacist / Vaccination Appointment) */
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+.actions a.action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex: 1;
+  height: 64px;
+  border-radius: 8px;
+  color: #1f3b72;
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.actions .action-icon {
+  display: flex;
+}
+
+.actions .action-icon svg {
+  width: 26px;
+  height: 26px;
+  stroke: currentcolor;
+}
+
+.actions .action-yellow {
+  background: #ffd54a;
+}
+
+.actions .action-pink {
+  background: #ffabab;
+}
+
+.actions .action-blue {
+  background: #8fd0f0;
+}
+
+.actions a.action:hover {
+  filter: brightness(0.96);
+}
+
+@media (width >= 900px) {
+  .actions {
+    flex-direction: row;
+    padding: 0 32px;
+  }
+}

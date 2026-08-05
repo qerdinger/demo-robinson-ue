@@ -19,6 +19,12 @@
     ]
   },
   {
+    "id": "actions",
+    "components": [
+      "action"
+    ]
+  },
+  {
     "id": "cards",
     "components": [
       "card"
