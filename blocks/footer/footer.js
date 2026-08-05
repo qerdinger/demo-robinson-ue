@@ -16,5 +16,12 @@ export default async function decorate(block) {
   const footer = document.createElement('div');
   while (fragment.firstElementChild) footer.append(fragment.firstElementChild);
 
+  // classes assigned by position: company info, three link columns, newsletter, bottom bar
+  const classes = ['company', 'links', 'links', 'links', 'newsletter', 'bottom'];
+  classes.forEach((c, i) => {
+    const section = footer.children[i];
+    if (section) section.classList.add(`footer-${c}`);
+  });
+
   block.append(footer);
 }

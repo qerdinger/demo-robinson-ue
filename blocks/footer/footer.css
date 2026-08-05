@@ -1,20 +1,130 @@
+/* SouthStar Drug inspired footer
+ * navy background, matching the header palette for visual cohesion
+ * company info + 3 link columns + newsletter, then a bottom policy/copyright bar
+ *
+ * Note: footer.js wraps the authored sections in one extra unnamed <div>
+ * before appending to the block, so the sections are `.footer > div > div`,
+ * not `.footer > div` directly.
+ */
+
 footer {
-  background-color: var(--light-color);
+  --ssd-blue: #0062ee;
+  --ssd-navy: #1f3b72;
+  --ssd-cyan: #00aad2;
+
+  background-color: var(--ssd-navy);
+  color: rgb(255 255 255 / 85%);
   font-size: var(--body-font-size-xs);
 }
 
 footer .footer > div {
   margin: auto;
   max-width: 1200px;
-  padding: 40px 24px 24px;
+  padding: 24px 24px 0;
+}
+
+footer .footer > div > div {
+  margin-bottom: 24px;
 }
 
 footer .footer p {
+  margin: 0 0 8px;
+}
+
+footer .footer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+footer .footer a:hover {
+  color: var(--ssd-cyan);
+}
+
+/* ---------- company info ---------- */
+footer .footer-company p:first-child {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* ---------- link columns ---------- */
+footer .footer-links p:first-child {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+footer .footer-links ul {
+  list-style: none;
   margin: 0;
+  padding: 0;
+}
+
+footer .footer-links li {
+  padding: 4px 0;
+}
+
+/* ---------- newsletter ---------- */
+footer .footer-newsletter p:first-child {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+footer .footer-newsletter p:last-child a {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 10px 24px;
+  border-radius: 6px;
+  background: var(--ssd-blue);
+  color: #fff;
+  font-weight: 700;
+}
+
+footer .footer-newsletter p:last-child a:hover {
+  background: var(--ssd-cyan);
+  color: #fff;
+}
+
+/* ---------- bottom bar ---------- */
+footer .footer-bottom {
+  margin-bottom: 0;
+  padding-top: 16px;
+  padding-bottom: 24px;
+  border-top: 1px solid rgb(255 255 255 / 15%);
+  font-size: 12px;
+  color: rgb(255 255 255 / 70%);
+}
+
+footer .footer-bottom ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
 }
 
 @media (width >= 900px) {
   footer .footer > div {
-    padding: 40px 32px 24px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr 1.1fr;
+    gap: 32px;
+    padding: 40px 32px 0;
+  }
+
+  footer .footer > div > div {
+    margin-bottom: 0;
+  }
+
+  footer .footer-bottom {
+    grid-column: 1 / -1;
+    margin-top: 8px;
+    padding-top: 16px;
+    padding-bottom: 32px;
+  }
+
+  footer .footer-bottom ul {
+    margin-bottom: 8px;
   }
 }
