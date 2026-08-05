@@ -1,0 +1,127 @@
+/* full-bleed promotional carousel: one slide visible at a time, autoplay,
+ * prev/next arrows and dot indicators, matching the header's brand palette
+ */
+
+.carousel-wrapper {
+  --ssd-blue: #0062ee;
+  --ssd-navy: #1f3b72;
+
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel {
+  position: relative;
+  left: 50%;
+  width: 100vw;
+  margin-left: -50vw;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: transform 0.5s ease;
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+}
+
+.carousel-slide > a,
+.carousel-slide > div {
+  display: block;
+  height: 100%;
+}
+
+.carousel-slide picture {
+  display: block;
+  height: 100%;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-controls {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  pointer-events: none;
+}
+
+.carousel-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: rgb(255 255 255 / 85%);
+  color: var(--ssd-navy);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.carousel-arrow svg {
+  width: 22px;
+  height: 22px;
+}
+
+.carousel-arrow:hover {
+  background: #fff;
+}
+
+.carousel-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  display: flex;
+  gap: 8px;
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+.carousel-dot {
+  width: 9px;
+  height: 9px;
+  margin: 0;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: rgb(255 255 255 / 55%);
+  cursor: pointer;
+}
+
+.carousel-dot[aria-current='true'] {
+  background: #fff;
+}
+
+@media (width >= 600px) {
+  .carousel-slide {
+    aspect-ratio: 16 / 7;
+  }
+}
+
+@media (width >= 900px) {
+  .carousel-slide {
+    aspect-ratio: 16 / 5;
+  }
+
+  .carousel-arrow {
+    width: 48px;
+    height: 48px;
+  }
+}
