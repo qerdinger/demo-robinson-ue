@@ -268,7 +268,7 @@
       },
       {
         "component": "richtext",
-        "name": "name",
+        "name": "label",
         "value": "",
         "label": "Name — add a link here to make the whole card clickable"
       },
