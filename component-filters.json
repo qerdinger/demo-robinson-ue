@@ -37,12 +37,6 @@
     ]
   },
   {
-    "id": "categories",
-    "components": [
-      "category"
-    ]
-  },
-  {
     "id": "columns",
     "components": [
       "column"
@@ -55,6 +49,12 @@
       "image",
       "button",
       "title"
+    ]
+  },
+  {
+    "id": "rail",
+    "components": [
+      "rail-item"
     ]
   }
 ]

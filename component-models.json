@@ -196,24 +196,6 @@
     ]
   },
   {
-    "id": "category",
-    "fields": [
-      {
-        "component": "reference",
-        "valueType": "string",
-        "name": "image",
-        "label": "Image",
-        "multi": false
-      },
-      {
-        "component": "richtext",
-        "name": "text",
-        "value": "",
-        "label": "Text"
-      }
-    ]
-  },
-  {
     "id": "columns",
     "fields": [
       {
@@ -265,6 +247,24 @@
         "value": "",
         "label": "Text",
         "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "rail-item",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Category: one linked line. Product: badge / name / price / [original price]"
       }
     ]
   }
