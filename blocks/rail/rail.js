@@ -9,15 +9,15 @@ const ICONS = {
 
 /**
  * Builds a simple category-style card: image + a single linked (or plain) label.
- * @param {Element} row The authored row
- * @param {Element} picture The row's picture element, if any
+ * @param {Element} picture The item's picture element, if any
+ * @param {Element} nameCell The authored "name" field cell
  * @returns {Element} The decorated card
  */
-function buildCategoryCard(row, picture) {
+function buildCategoryCard(picture, nameCell) {
   const card = document.createElement('li');
   card.className = 'rail-item rail-item-category';
-  const link = row.querySelector('a');
-  const label = link?.textContent.trim() || row.querySelector('p')?.textContent.trim() || '';
+  const link = nameCell?.querySelector('a');
+  const label = nameCell?.textContent.trim() || '';
 
   const media = document.createElement('div');
   media.className = 'rail-item-media';
@@ -35,11 +35,14 @@ function buildCategoryCard(row, picture) {
 /**
  * Builds a full product-style card: image + brand watermark + badge, name,
  * price (with optional struck-through original price), Add to Cart, wishlist.
- * @param {Element} picture The row's picture element, if any
- * @param {string[]} lines The paragraph texts: [badge, name, price, originalPrice?]
+ * @param {Element} picture The item's picture element, if any
+ * @param {string} badge The authored badge text (e.g. "SAVE 15%")
+ * @param {string} name The authored product name
+ * @param {string} price The authored current price
+ * @param {string} originalPrice The authored original price, if any
  * @returns {Element} The decorated card
  */
-function buildProductCard(picture, [badge, name, price, originalPrice]) {
+function buildProductCard(picture, badge, name, price, originalPrice) {
   const card = document.createElement('li');
   card.className = 'rail-item rail-item-product';
 
@@ -63,10 +66,11 @@ function buildProductCard(picture, [badge, name, price, originalPrice]) {
 }
 
 /**
- * loads and decorates the rail: a horizontally scrollable row of cards,
- * rendered as simple category cards (one line of content) or full product
- * cards (badge / name / price / [original price]) depending on how many
- * lines of text each authored item has.
+ * loads and decorates the rail: a horizontally scrollable row of cards.
+ * Each authored item has 4 fields, in order: image, badge, name, price
+ * (whose first line is the current price and optional second line is the
+ * original price). A filled-in price renders a full product card; an empty
+ * price renders a simple category card (image + name, optionally linked).
  * @param {Element} block The rail block element
  */
 export default function decorate(block) {
@@ -74,11 +78,17 @@ export default function decorate(block) {
   track.className = 'rail-track';
 
   [...block.children].forEach((row) => {
-    const picture = row.querySelector('picture');
-    const lines = [...row.querySelectorAll('p')].map((p) => p.textContent.trim());
-    const card = lines.length >= 3
-      ? buildProductCard(picture, lines)
-      : buildCategoryCard(row, picture);
+    const [imageCell, badgeCell, nameCell, priceCell] = row.children;
+    const picture = imageCell?.querySelector('picture');
+    const [price, originalPrice] = [...(priceCell?.querySelectorAll('p') || [])]
+      .map((p) => p.textContent.trim());
+    const badge = badgeCell?.textContent.trim();
+    const name = nameCell?.textContent.trim();
+
+    const card = price
+      ? buildProductCard(picture, badge, name, price, originalPrice)
+      : buildCategoryCard(picture, nameCell);
+
     moveInstrumentation(row, card);
     track.append(card);
   });

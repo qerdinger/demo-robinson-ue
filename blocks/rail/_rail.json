@@ -44,9 +44,21 @@
         },
         {
           "component": "richtext",
-          "name": "text",
+          "name": "badge",
           "value": "",
-          "label": "Category: one linked line. Product: badge / name / price / [original price]"
+          "label": "Badge (optional, e.g. \"SAVE 15%\") — leave empty for a simple category card"
+        },
+        {
+          "component": "richtext",
+          "name": "name",
+          "value": "",
+          "label": "Name — add a link here to make the whole card clickable"
+        },
+        {
+          "component": "richtext",
+          "name": "price",
+          "value": "",
+          "label": "Price (optional, leave empty for a simple category card). Second line = original price, shown struck through"
         }
       ]
     }
