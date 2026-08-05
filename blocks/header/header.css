@@ -350,13 +350,13 @@ header nav .nav-sections a:hover {
 
 @media (width >= 900px) {
   /* full-bleed the category bar to the viewport edge regardless of the
-     nav's own max-width/padding, using the standard breakout technique */
+     nav's own max-width/padding. Uses margin (not "left" positioning) so the
+     math cancels out correctly even once nav hits its own max-width cap. */
   header nav .nav-sections {
     display: block;
-    position: relative;
-    left: 50%;
-    width: 100vw;
-    margin-left: -50vw;
+    width: auto;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
     background: var(--ssd-cyan-light);
   }
 
