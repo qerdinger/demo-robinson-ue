@@ -149,11 +149,11 @@ header nav .nav-brand-accent {
 }
 
 header nav .nav-brand a svg {
-  width: 12px;
-  height: 12px;
-  margin-left: 2px;
+  width: 13px;
+  height: 13px;
+  margin-left: -4px;
   align-self: flex-start;
-  color: var(--ssd-cyan);
+  color: #fff;
 }
 
 header nav .nav-brand a:hover {
@@ -180,12 +180,11 @@ header nav .nav-search {
   header nav .nav-search {
     display: flex;
     align-items: center;
+    gap: 8px;
     width: clamp(220px, 34vw, 460px);
     height: 40px;
     margin-right: 8px;
-    border-radius: 6px;
-    overflow: hidden;
-    background: #fff;
+    background: transparent;
   }
 }
 
@@ -193,30 +192,37 @@ header nav .nav-search input {
   flex: 1;
   min-width: 0;
   height: 100%;
-  border: 0;
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: 6px;
   padding: 0 16px;
   font-size: 15px;
   font-family: var(--body-font-family);
   background: transparent;
-  color: var(--text-color);
+  color: #fff;
+}
+
+header nav .nav-search input::placeholder {
+  color: rgb(255 255 255 / 60%);
 }
 
 header nav .nav-search input:focus {
   outline: none;
+  border-color: rgb(255 255 255 / 50%);
 }
 
 header nav .nav-search button {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: none;
   height: 100%;
   width: 44px;
   margin: 0;
   padding: 0;
   border: 0;
-  border-radius: 0;
-  background: var(--ssd-blue);
-  color: #fff;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ssd-navy);
   cursor: pointer;
 }
 
@@ -228,6 +234,12 @@ header nav .nav-search svg {
 
 header nav .nav-tools-buttons {
   margin: 0;
+}
+
+header nav .nav-widget-icon {
+  flex: none;
+  width: 32px;
+  height: 32px;
 }
 
 header nav a.nav-tool {
