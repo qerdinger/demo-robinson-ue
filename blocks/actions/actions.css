@@ -4,9 +4,9 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-width: 1200px;
-  margin: 24px auto;
-  padding: 0 16px;
+  width: auto;
+  margin: 24px calc(25% - 25vw);
+  padding: 0;
 }
 
 .actions a.action {
@@ -52,6 +52,5 @@
 @media (width >= 900px) {
   .actions {
     flex-direction: row;
-    padding: 0 32px;
   }
 }
