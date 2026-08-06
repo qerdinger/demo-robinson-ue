@@ -64,6 +64,12 @@
     ]
   },
   {
+    "id": "features",
+    "components": [
+      "feature"
+    ]
+  },
+  {
     "id": "rail",
     "components": [
       "rail-item"

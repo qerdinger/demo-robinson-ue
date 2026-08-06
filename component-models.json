@@ -249,6 +249,23 @@
     ]
   },
   {
+    "id": "feature",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "title",
+        "value": "",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "value": "",
+        "label": "Description"
+      }
+    ]
+  },
+  {
     "id": "fragment",
     "fields": [
       {

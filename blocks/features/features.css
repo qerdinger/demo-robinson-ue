@@ -1,0 +1,55 @@
+/* row of icon + title + description "feature" items, divided by thin rules */
+
+.features {
+  display: grid;
+  grid-template-columns: 1fr;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 24px;
+  text-align: center;
+}
+
+.feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+}
+
+.feature-icon svg {
+  height: 100%;
+}
+
+.feature-body > :first-child {
+  margin-top: 0;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.feature-body p {
+  margin: 4px 0;
+  color: var(--dark-color);
+  font-size: 14px;
+}
+
+@media (width >= 900px) {
+  .features {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .feature-item {
+    border-left: 1px solid var(--light-color);
+  }
+
+  .feature-item:first-child {
+    border-left: none;
+  }
+}
