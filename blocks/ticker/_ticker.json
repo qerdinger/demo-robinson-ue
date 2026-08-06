@@ -1,0 +1,55 @@
+{
+  "definitions": [
+    {
+      "title": "Ticker",
+      "id": "ticker",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Ticker",
+              "filter": "ticker"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Ticker Item",
+      "id": "ticker-item",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Ticker Item",
+              "model": "ticker-item"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "ticker-item",
+      "fields": [
+        {
+          "component": "richtext",
+          "name": "text",
+          "value": "",
+          "label": "Text — e.g. \"Immunity Boosters\", add a linked \"Shop Now\" in the same line"
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "ticker",
+      "components": [
+        "ticker-item"
+      ]
+    }
+  ]
+}

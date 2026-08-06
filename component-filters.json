@@ -56,5 +56,11 @@
     "components": [
       "rail-item"
     ]
+  },
+  {
+    "id": "ticker",
+    "components": [
+      "ticker-item"
+    ]
   }
 ]

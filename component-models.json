@@ -279,5 +279,16 @@
         "label": "Price (optional, leave empty for a simple category card). Second line = original price, shown struck through"
       }
     ]
+  },
+  {
+    "id": "ticker-item",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text — e.g. \"Immunity Boosters\", add a linked \"Shop Now\" in the same line"
+      }
+    ]
   }
 ]
