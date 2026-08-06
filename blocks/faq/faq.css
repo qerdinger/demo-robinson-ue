@@ -1,7 +1,25 @@
 /* accordion of frequently asked questions, using native <details>/<summary> */
 
+.faq-container {
+  background: #fff;
+  padding: 24px 0;
+}
+
+.faq-container .default-content-wrapper:first-child {
+  max-width: 1200px;
+  margin: 0 auto 24px;
+  padding: 20px 24px;
+  border-radius: 8px;
+  background: #f2f2f2;
+}
+
+.faq-container .default-content-wrapper:first-child h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
 .faq {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 16px;
 }
@@ -19,6 +37,7 @@
 }
 
 .faq-question {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -30,15 +49,16 @@
   cursor: pointer;
 }
 
-.faq-question svg {
+.faq-question::after {
+  content: '+';
   flex: none;
-  width: 18px;
-  height: 18px;
-  transition: transform 0.2s ease;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1;
 }
 
-.faq-item[open] .faq-question svg {
-  transform: rotate(180deg);
+.faq-item[open] .faq-question::after {
+  content: '\2212';
 }
 
 .faq-answer {
