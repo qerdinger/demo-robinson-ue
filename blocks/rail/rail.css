@@ -7,7 +7,7 @@
   --ssd-navy: #1f3b72;
   --ssd-cyan: #00aad2;
 
-  background: #f2f2f2;
+  background: #fff;
   padding: 24px 0;
 }
 
@@ -19,7 +19,7 @@
   margin: 0 auto 16px;
   padding: 20px 24px;
   border-radius: 8px;
-  background: #fff;
+  background: #f2f2f2;
 }
 
 .rail-container .default-content-wrapper:first-child h2 {
