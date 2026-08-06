@@ -7,11 +7,14 @@ export default function decorate(block) {
   const items = [...block.children].map((row) => {
     const item = document.createElement('span');
     item.className = 'ticker-item';
-    // unwrap the richtext <p> so its inline content sits directly in the
-    // item span — leaving the <p> in place would push the bullet separator
-    // (an inline ::after on the span) onto its own line
-    const paragraph = row.querySelector('p');
-    item.append(...(paragraph ? paragraph.childNodes : row.firstElementChild.childNodes));
+    // unwrap each field's richtext <p> so its inline content sits directly
+    // in the item span — leaving <p>s in place would push the bullet
+    // separator (an inline ::after on the span) onto its own line
+    const [titleCell, buttonCell] = row.children;
+    const titleParagraph = titleCell?.querySelector('p');
+    const buttonParagraph = buttonCell?.querySelector('p');
+    if (titleParagraph) item.append(...titleParagraph.childNodes, ' ');
+    if (buttonParagraph) item.append(...buttonParagraph.childNodes);
     return item;
   });
 

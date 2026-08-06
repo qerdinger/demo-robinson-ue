@@ -37,9 +37,15 @@
       "fields": [
         {
           "component": "richtext",
-          "name": "text",
+          "name": "title",
           "value": "",
-          "label": "Text — e.g. \"Immunity Boosters\", add a linked \"Shop Now\" in the same line"
+          "label": "Title — e.g. \"Immunity Boosters\""
+        },
+        {
+          "component": "richtext",
+          "name": "button",
+          "value": "",
+          "label": "Button — add a link to the text (e.g. \"Shop Now\") to make it clickable"
         }
       ]
     }
