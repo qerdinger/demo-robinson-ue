@@ -25,6 +25,12 @@
     ]
   },
   {
+    "id": "blog-rail",
+    "components": [
+      "blog-item"
+    ]
+  },
+  {
     "id": "cards",
     "components": [
       "card"

@@ -153,6 +153,23 @@
     ]
   },
   {
+    "id": "blog-item",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "title",
+        "value": "",
+        "label": "Title — add a link to the post to make it clickable"
+      },
+      {
+        "component": "richtext",
+        "name": "meta",
+        "value": "",
+        "label": "Meta — author, excerpt and date, then a \"Read more\" link on its own line"
+      }
+    ]
+  },
+  {
     "id": "card",
     "fields": [
       {
