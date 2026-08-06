@@ -1,3 +1,5 @@
+import { moveInstrumentation } from '../../scripts/scripts.js';
+
 /**
  * loads and decorates the ticker: an infinitely auto-scrolling strip of
  * short promo items, each optionally containing a "Shop Now" link.
@@ -15,6 +17,8 @@ export default function decorate(block) {
     const buttonParagraph = buttonCell?.querySelector('p');
     if (titleParagraph) item.append(...titleParagraph.childNodes, ' ');
     if (buttonParagraph) item.append(...buttonParagraph.childNodes);
+    // keep the item selectable/editable in Universal Editor
+    moveInstrumentation(row, item);
     return item;
   });
 
@@ -27,8 +31,20 @@ export default function decorate(block) {
     block.classList.add('ticker-static');
     items.forEach((item) => track.append(item));
   } else {
-    // duplicate the item set so the track can loop seamlessly
-    [...items, ...items.map((item) => item.cloneNode(true))].forEach((item) => track.append(item));
+    // duplicate the item set so the track can loop seamlessly. The clones
+    // are decorative only — strip their editing attributes (and those of
+    // any descendants) so Universal Editor doesn't show two selectable
+    // instances of the same item.
+    const clones = items.map((item) => {
+      const clone = item.cloneNode(true);
+      [clone, ...clone.querySelectorAll('*')].forEach((el) => {
+        el.getAttributeNames()
+          .filter((attr) => attr.startsWith('data-aue-') || attr.startsWith('data-richtext-'))
+          .forEach((attr) => el.removeAttribute(attr));
+      });
+      return clone;
+    });
+    [...items, ...clones].forEach((item) => track.append(item));
   }
 
   block.append(track);
