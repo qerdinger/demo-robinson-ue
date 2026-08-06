@@ -58,6 +58,12 @@
     ]
   },
   {
+    "id": "faq",
+    "components": [
+      "faq-item"
+    ]
+  },
+  {
     "id": "rail",
     "components": [
       "rail-item"

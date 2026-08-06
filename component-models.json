@@ -232,6 +232,23 @@
     ]
   },
   {
+    "id": "faq-item",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "question",
+        "value": "",
+        "label": "Question"
+      },
+      {
+        "component": "richtext",
+        "name": "answer",
+        "value": "",
+        "label": "Answer"
+      }
+    ]
+  },
+  {
     "id": "fragment",
     "fields": [
       {

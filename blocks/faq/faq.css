@@ -1,0 +1,57 @@
+/* accordion of frequently asked questions, using native <details>/<summary> */
+
+.faq {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--light-color);
+}
+
+.faq-item summary {
+  list-style: none;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0;
+  color: var(--text-color);
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.faq-question svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  transition: transform 0.2s ease;
+}
+
+.faq-item[open] .faq-question svg {
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  padding: 0 0 20px;
+  color: var(--dark-color);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.faq-answer > :first-child {
+  margin-top: 0;
+}
+
+.faq-answer > :last-child {
+  margin-bottom: 0;
+}
