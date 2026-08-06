@@ -70,6 +70,12 @@
     ]
   },
   {
+    "id": "services",
+    "components": [
+      "service"
+    ]
+  },
+  {
     "id": "ticker",
     "components": [
       "ticker-item"

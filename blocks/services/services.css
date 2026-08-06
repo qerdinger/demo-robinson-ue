@@ -1,0 +1,42 @@
+/* row of "services" image-button cards (border baked into the image), wraps on small screens */
+
+.services-container {
+  background: #fff;
+  padding: 24px 0;
+}
+
+.services-container .default-content-wrapper:first-child {
+  max-width: 1200px;
+  margin: 0 auto 24px;
+  padding: 20px 24px;
+  border-radius: 8px;
+  background: #f2f2f2;
+}
+
+.services-container .default-content-wrapper:first-child h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.service-item {
+  display: block;
+  flex: 1 1 200px;
+  aspect-ratio: 2 / 1;
+}
+
+.service-item picture,
+.service-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
