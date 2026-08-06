@@ -18,6 +18,8 @@
   --text-color: #131313;
   --link-color: #3b63fb;
   --link-hover-color: #1d3ecf;
+  --brand-blue: #0062ee;
+  --brand-blue-hover: #004fc0;
 
   /* fonts */
   --body-font-family: roboto, roboto-fallback, sans-serif;
@@ -180,10 +182,11 @@ button.button {
   max-width: 100%;
   margin: 0;
   border: 2px solid transparent;
-  border-radius: 2.4em;
-  padding: 0.5em 1.2em;
+  border-radius: 5px;
+  padding: 0.7em 1.6em;
   font: inherit;
-  font-weight: 500;
+  font-weight: 700;
+  letter-spacing: 0.02em;
   line-height: 1.25;
   text-decoration: none;
   cursor: pointer;
@@ -200,8 +203,8 @@ button.button:disabled {
 
 a.button.primary,
 button.button.primary {
-  border-color: var(--text-color);
-  background-color: var(--text-color);
+  border-color: var(--brand-blue);
+  background-color: var(--brand-blue);
   color: var(--background-color);
 }
 
@@ -209,9 +212,9 @@ a.button.primary:hover,
 a.button.primary:focus-visible,
 button.button.primary:hover,
 button.button.primary:focus-visible {
-  border-color: var(--dark-color);
-  background-color: var(--dark-color);
-  color: var(--light-color);
+  border-color: var(--brand-blue-hover);
+  background-color: var(--brand-blue-hover);
+  color: var(--background-color);
 }
 
 a.button.primary[aria-disabled="true"],

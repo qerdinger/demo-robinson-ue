@@ -1,0 +1,57 @@
+/* two-column image + text + button banner, alternating sides */
+
+.promo {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #eef1f4;
+}
+
+.promo.promo-reverse {
+  background: #fff;
+}
+
+.promo-image {
+  aspect-ratio: 16 / 9;
+}
+
+.promo-image picture,
+.promo-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.promo-text {
+  padding: 32px 24px;
+}
+
+.promo-text > :first-child {
+  margin-top: 0;
+}
+
+.promo-text p.button-wrapper {
+  margin-top: 24px;
+}
+
+@media (width >= 600px) {
+  .promo {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .promo-image {
+    aspect-ratio: auto;
+    height: 100%;
+  }
+
+  .promo.promo-reverse .promo-image {
+    order: 2;
+  }
+
+  .promo-text {
+    padding: 40px 48px;
+  }
+}
