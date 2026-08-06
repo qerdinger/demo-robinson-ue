@@ -29,7 +29,6 @@
 
 .ticker-item {
   flex: none;
-  padding: 0 24px;
   color: #0b1a33;
   font-size: 14px;
   font-weight: 700;
@@ -39,7 +38,7 @@
 
 .ticker-item::after {
   content: '•';
-  margin-left: 24px;
+  margin: 0 24px;
   opacity: 0.6;
 }
 
