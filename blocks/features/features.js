@@ -1,6 +1,7 @@
+import { createOptimizedPicture } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
-// icon assigned by position — cycles if more items are added
+// default icon assigned by position, used whenever an item has no authored icon
 const ICON_ORDER = ['chat', 'headset', 'truck', 'tag'];
 
 const ICONS = {
@@ -11,21 +12,26 @@ const ICONS = {
 };
 
 /**
- * loads and decorates the features row: an icon (assigned by position),
- * title and description per item.
+ * loads and decorates the features row: an icon (authored image/SVG, or a
+ * default assigned by position), title and description per item.
  * @param {Element} block The features block element
  */
 export default function decorate(block) {
   [...block.children].forEach((row, i) => {
-    const [titleCell, descriptionCell] = row.children;
-    const icon = ICON_ORDER[i % ICON_ORDER.length];
+    const [iconCell, , titleCell, descriptionCell] = row.children;
+    const picture = iconCell?.querySelector('picture');
 
     const item = document.createElement('div');
     item.className = 'feature-item';
 
     const iconWrapper = document.createElement('span');
     iconWrapper.className = 'feature-icon';
-    iconWrapper.innerHTML = ICONS[icon];
+    if (picture) {
+      iconWrapper.append(picture);
+    } else {
+      const defaultIcon = ICON_ORDER[i % ICON_ORDER.length];
+      iconWrapper.innerHTML = ICONS[defaultIcon];
+    }
 
     const body = document.createElement('div');
     body.className = 'feature-body';
@@ -35,5 +41,11 @@ export default function decorate(block) {
     item.append(iconWrapper, body);
     moveInstrumentation(row, item);
     row.replaceWith(item);
+  });
+
+  block.querySelectorAll('picture > img').forEach((img) => {
+    const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [{ width: '80' }]);
+    moveInstrumentation(img, optimizedPic.querySelector('img'));
+    img.closest('picture').replaceWith(optimizedPic);
   });
 }

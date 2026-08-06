@@ -24,7 +24,9 @@
   height: 40px;
 }
 
-.feature-icon svg {
+.feature-icon svg,
+.feature-icon img {
+  width: auto;
   height: 100%;
 }
 
