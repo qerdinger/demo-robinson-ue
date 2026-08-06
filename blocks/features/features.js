@@ -18,7 +18,7 @@ const ICONS = {
  */
 export default function decorate(block) {
   [...block.children].forEach((row, i) => {
-    const [iconCell, , titleCell, descriptionCell] = row.children;
+    const [iconCell, titleCell, descriptionCell] = row.children;
     const picture = iconCell?.querySelector('picture');
 
     const item = document.createElement('div');
