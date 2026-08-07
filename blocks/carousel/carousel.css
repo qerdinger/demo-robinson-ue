@@ -1,5 +1,12 @@
 /* full-bleed promotional carousel: one slide visible at a time, autoplay,
  * prev/next arrows and dot indicators, matching the header's brand palette
+ *
+ * Slide height is a fixed px value per breakpoint (not tied to viewport
+ * width via aspect-ratio) so the carousel can stay simple full-bleed at
+ * every screen size without ever growing too tall. Because a fixed height
+ * makes the slide proportionally wider than the ~2.55:1 banner images at
+ * desktop widths, object-fit: cover only ever trims the top/bottom —
+ * never the left/right edges where banner text lives.
  */
 
 .carousel-wrapper {
@@ -28,9 +35,7 @@
 .carousel-slide {
   flex: 0 0 100%;
   width: 100%;
-  aspect-ratio: 51 / 20;
-  max-height: 500px;
-  background: transparent;
+  height: 220px;
 }
 
 .carousel-slide > a,
@@ -47,7 +52,7 @@
 .carousel-slide img {
   width: 100%;
   height: 100%;
-  object-fit: fill;
+  object-fit: contain;
 }
 
 .carousel-controls {
@@ -110,7 +115,17 @@
   background: #fff;
 }
 
+@media (width >= 600px) {
+  .carousel-slide {
+    height: 320px;
+  }
+}
+
 @media (width >= 900px) {
+  .carousel-slide {
+    height: 450px;
+  }
+
   .carousel-arrow {
     width: 48px;
     height: 48px;
