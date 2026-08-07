@@ -118,6 +118,7 @@
 @media (width >= 900px) {
   .carousel-slide {
     aspect-ratio: 51 / 20;
+    max-height: 500px;
   }
 
   .carousel-arrow {
