@@ -50,7 +50,17 @@
         "hero",
         "cards",
         "columns",
-        "fragment"
+        "fragment",
+        "actions",
+        "blog-rail",
+        "carousel",
+        "faq",
+        "features",
+        "promo",
+        "promotions-cf",
+        "rail",
+        "services",
+        "ticker"
       ]
     }
   ]
