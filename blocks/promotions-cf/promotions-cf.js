@@ -1,5 +1,3 @@
-import { createOptimizedPicture } from '../../scripts/aem.js';
-
 const STYLES = ['image-left', 'image-background', 'title-only', 'text-only'];
 
 function trimBlurb(text, maxLength = 160) {
@@ -53,8 +51,11 @@ async function renderPromotion(item, headers, aemHost, style, index) {
     if (blobUrl) {
       const imageCol = document.createElement('div');
       imageCol.className = 'promotion-image';
-      const optimizedPic = createOptimizedPicture(blobUrl, item.title || '', false, [{ width: '800' }]);
-      imageCol.append(optimizedPic);
+      const img = document.createElement('img');
+      img.src = blobUrl;
+      img.alt = item.title || '';
+      img.loading = 'lazy';
+      imageCol.append(img);
       block.append(imageCol);
     }
   }
