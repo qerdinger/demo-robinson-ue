@@ -339,10 +339,32 @@
         "label": "Text — description, then add a button link on its own line (e.g. \"Contact Us\")"
       },
       {
-        "component": "richtext",
+        "component": "select",
         "name": "style",
         "value": "",
-        "label": "Style — type one of: default, image-left, image-background, title-only, text-only (leave empty for default, which auto-alternates sides)"
+        "label": "Style",
+        "options": [
+          {
+            "name": "Default (auto-alternates sides)",
+            "value": ""
+          },
+          {
+            "name": "Image Left / Info Right",
+            "value": "image-left"
+          },
+          {
+            "name": "Image Background",
+            "value": "image-background"
+          },
+          {
+            "name": "Title Only",
+            "value": "title-only"
+          },
+          {
+            "name": "Text Only",
+            "value": "text-only"
+          }
+        ]
       }
     ]
   },
@@ -370,10 +392,33 @@
         "label": "Access Token"
       },
       {
-        "component": "text",
+        "component": "select",
         "valueType": "string",
         "name": "style",
-        "label": "Style — type one of: default, image-left, image-background, title-only, text-only (leave empty for default, applies to every card)"
+        "value": "",
+        "label": "Style — applies to every card",
+        "options": [
+          {
+            "name": "Default (auto-alternates sides)",
+            "value": ""
+          },
+          {
+            "name": "Image Left / Info Right",
+            "value": "image-left"
+          },
+          {
+            "name": "Image Background",
+            "value": "image-background"
+          },
+          {
+            "name": "Title Only",
+            "value": "title-only"
+          },
+          {
+            "name": "Text Only",
+            "value": "text-only"
+          }
+        ]
       }
     ]
   },
