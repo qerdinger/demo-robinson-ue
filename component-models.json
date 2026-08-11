@@ -316,7 +316,7 @@
     ]
   },
   {
-    "id": "promo",
+    "id": "promotion",
     "fields": [
       {
         "component": "reference",
@@ -337,6 +337,12 @@
         "name": "text",
         "value": "",
         "label": "Text — description, then add a button link on its own line (e.g. \"Contact Us\")"
+      },
+      {
+        "component": "richtext",
+        "name": "style",
+        "value": "",
+        "label": "Style — type one of: default, image-left, image-background, title-only, text-only (leave empty for default, which auto-alternates sides)"
       }
     ]
   },
@@ -362,6 +368,12 @@
         "valueType": "string",
         "name": "accessToken",
         "label": "Access Token"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "style",
+        "label": "Style — type one of: default, image-left, image-background, title-only, text-only (leave empty for default, applies to every card)"
       }
     ]
   },

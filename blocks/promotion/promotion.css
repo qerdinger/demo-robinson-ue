@@ -1,14 +1,4 @@
-/* promotions-cf renders each fetched promotion using the same markup and
- * class names as the promotion block, so these rules are a duplicate of
- * blocks/promotion/promotion.css (blocks can't share CSS across folders) —
- * keep the two in sync if the promotion styles change.
- */
-
-.promotions-cf {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
+/* image + text + button banner, with a choice of layout styles */
 
 .promotion {
   display: grid;
@@ -65,6 +55,11 @@
     padding: 40px 48px;
   }
 }
+
+/* ---------- image-left: fixed image-left/text-right, never alternates ---------- */
+
+/* reuses the default two-column layout above; the class only stops the
+   auto-alternation logic in JS, so no extra rules are needed here */
 
 /* ---------- image-background: image behind the text, no columns ---------- */
 .promotion.promotion-image-background {

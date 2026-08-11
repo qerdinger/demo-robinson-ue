@@ -1,3 +1,7 @@
+import { createOptimizedPicture } from '../../scripts/aem.js';
+
+const STYLES = ['image-left', 'image-background', 'title-only', 'text-only'];
+
 function trimBlurb(text, maxLength = 160) {
   const trimmed = text.trim();
   return trimmed.length > maxLength ? `${trimmed.slice(0, maxLength - 1).trimEnd()}…` : trimmed;
@@ -18,64 +22,75 @@ async function fetchAuthenticatedImageUrl(url, headers) {
   }
 }
 
-async function renderCard(item, headers, aemHost) {
-  const li = document.createElement('li');
-  li.className = 'promotions-card';
+/**
+ * renders one fetched promotion using the same .promotion / .promotion-image /
+ * .promotion-text structure and style classes as the promotion block, so a
+ * promotions-cf block looks and behaves identically.
+ * @param {Object} item The GraphQL content fragment item
+ * @param {Object} headers Auth headers to fetch the image with, if any
+ * @param {string} aemHost The AEM host images are served from
+ * @param {string} style One of the promotion style values, or 'default'
+ * @param {number} index The item's position, used for default alternation
+ */
+async function renderPromotion(item, headers, aemHost, style, index) {
+  const block = document.createElement('div');
+  block.className = 'promotion';
 
-  const link = document.createElement('div');
-  link.className = 'promotions-card-link';
+  if (style === 'default') {
+    if (index % 2 === 1) block.classList.add('promotion-reverse');
+  } else {
+    block.classList.add(`promotion-${style}`);
+  }
+
+  const showImage = style !== 'title-only' && style !== 'text-only';
 
   // GraphQL's Content Fragment schema names these fields with a leading underscore
   // eslint-disable-next-line no-underscore-dangle
   const imagePath = item.featuredImage?._dynamicUrl || item.featuredImage?._path;
-  if (imagePath) {
+  if (imagePath && showImage) {
     const imageUrl = imagePath.startsWith('/') ? `${aemHost}${imagePath}` : imagePath;
     const blobUrl = await fetchAuthenticatedImageUrl(imageUrl, headers);
     if (blobUrl) {
-      const imageWrapper = document.createElement('div');
-      imageWrapper.className = 'promotions-card-image';
-      const img = document.createElement('img');
-      img.src = blobUrl;
-      img.alt = item.title || '';
-      img.loading = 'lazy';
-      imageWrapper.append(img);
-      link.append(imageWrapper);
+      const imageCol = document.createElement('div');
+      imageCol.className = 'promotion-image';
+      const optimizedPic = createOptimizedPicture(blobUrl, item.title || '', false, [{ width: '800' }]);
+      imageCol.append(optimizedPic);
+      block.append(imageCol);
     }
   }
 
-  const body = document.createElement('div');
-  body.className = 'promotions-card-body';
+  const textCol = document.createElement('div');
+  textCol.className = 'promotion-text';
   if (item.title) {
     const titleEl = document.createElement('p');
-    titleEl.className = 'promotions-card-title';
-    titleEl.textContent = item.title;
-    body.append(titleEl);
+    titleEl.innerHTML = `<strong>${item.title}</strong>`;
+    textCol.append(titleEl);
   }
-  if (item.main?.plaintext) {
+  if (style !== 'title-only' && item.main?.plaintext) {
     const descriptionEl = document.createElement('p');
-    descriptionEl.className = 'promotions-card-description';
     descriptionEl.textContent = trimBlurb(item.main.plaintext);
-    body.append(descriptionEl);
+    textCol.append(descriptionEl);
   }
-  link.append(body);
-  li.append(link);
-  return li;
+  block.append(textCol);
+
+  return block;
 }
 
 /**
  * loads and decorates the promotions-cf block: fetches its cards from a public
- * GraphQL persisted query instead of authored block items
+ * GraphQL persisted query instead of authored block items, and renders them
+ * using the same look as the promotion block.
  * @param {Element} block The promotions-cf block element
  */
 export default async function decorate(block) {
-  const [aemHostDiv, queryPathDiv, accessTokenDiv] = block.children;
+  const [aemHostDiv, queryPathDiv, accessTokenDiv, styleDiv] = block.children;
   const aemHost = aemHostDiv?.textContent.trim();
   const queryPath = queryPathDiv?.textContent.trim();
   const accessToken = accessTokenDiv?.textContent.trim();
+  const styleValue = styleDiv?.textContent.trim().toLowerCase();
+  const style = STYLES.includes(styleValue) ? styleValue : 'default';
 
-  block.classList.add('promotions');
-  const ul = document.createElement('ul');
-  block.replaceChildren(ul);
+  block.textContent = '';
 
   if (!aemHost || !queryPath) return;
 
@@ -94,6 +109,8 @@ export default async function decorate(block) {
     return;
   }
 
-  const cards = await Promise.all(items.map((item) => renderCard(item, headers, aemHost)));
-  cards.forEach((li) => ul.append(li));
+  const promotions = await Promise.all(
+    items.map((item, index) => renderPromotion(item, headers, aemHost, style, index)),
+  );
+  block.append(...promotions);
 }
