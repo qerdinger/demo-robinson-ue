@@ -1,7 +1,7 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
-const STYLES = ['image-left', 'image-background', 'title-only', 'text-only'];
+const STYLES = ['image-left', 'image-right', 'image-background', 'title-only', 'text-only'];
 
 /**
  * loads and decorates the promotion: an image + text + button banner with a

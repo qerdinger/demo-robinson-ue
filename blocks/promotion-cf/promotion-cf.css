@@ -47,6 +47,10 @@
     height: 100%;
   }
 
+  .promotion.promotion-image-right .promotion-image {
+    order: 2;
+  }
+
   .promotion-text {
     padding: 40px 48px;
   }

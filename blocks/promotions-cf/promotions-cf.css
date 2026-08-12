@@ -57,7 +57,8 @@
     height: 100%;
   }
 
-  .promotion.promotion-reverse .promotion-image {
+  .promotion.promotion-reverse .promotion-image,
+  .promotion.promotion-image-right .promotion-image {
     order: 2;
   }
 

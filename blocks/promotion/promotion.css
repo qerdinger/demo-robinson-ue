@@ -47,7 +47,8 @@
     height: 100%;
   }
 
-  .promotion.promotion-reverse .promotion-image {
+  .promotion.promotion-reverse .promotion-image,
+  .promotion.promotion-image-right .promotion-image {
     order: 2;
   }
 
@@ -60,6 +61,11 @@
 
 /* reuses the default two-column layout above; the class only stops the
    auto-alternation logic in JS, so no extra rules are needed here */
+
+/* ---------- image-right: fixed image-right/text-left, never alternates ---------- */
+
+/* reuses the default two-column layout; the order:2 rule above moves the
+   image column to the right on the same grid, no other rules needed */
 
 /* ---------- image-background: image behind the text, no columns ---------- */
 .promotion.promotion-image-background {

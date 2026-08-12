@@ -360,6 +360,10 @@
             "value": "image-left"
           },
           {
+            "name": "Image Right / Info Left",
+            "value": "image-right"
+          },
+          {
             "name": "Image Background",
             "value": "image-background"
           },
@@ -411,6 +415,10 @@
           {
             "name": "Image Left / Info Right",
             "value": "image-left"
+          },
+          {
+            "name": "Image Right / Info Left",
+            "value": "image-right"
           },
           {
             "name": "Image Background",
@@ -465,6 +473,10 @@
           {
             "name": "Image Left / Info Right",
             "value": "image-left"
+          },
+          {
+            "name": "Image Right / Info Left",
+            "value": "image-right"
           },
           {
             "name": "Image Background",

@@ -1,4 +1,4 @@
-const STYLES = ['image-left', 'image-background', 'title-only', 'text-only'];
+const STYLES = ['image-left', 'image-right', 'image-background', 'title-only', 'text-only'];
 
 function trimBlurb(text, maxLength = 160) {
   const trimmed = text.trim();

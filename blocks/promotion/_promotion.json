@@ -55,6 +55,10 @@
               "value": "image-left"
             },
             {
+              "name": "Image Right / Info Left",
+              "value": "image-right"
+            },
+            {
               "name": "Image Background",
               "value": "image-background"
             },
