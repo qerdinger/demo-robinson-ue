@@ -71,6 +71,12 @@
               "value": "text-only"
             }
           ]
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "slug",
+          "label": "Slug (optional) — if set, fetches that item from the persisted GraphQL query instead of the fields above"
         }
       ]
     }

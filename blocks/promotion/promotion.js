@@ -1,28 +1,131 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
+import getGraphqlHost from '../../scripts/graphql-host.js';
 
 const STYLES = ['image-left', 'image-right', 'image-background', 'title-only', 'text-only'];
+const GRAPHQL_QUERY_PATH = 'Robinson/promotion-by-slug';
+
+function trimBlurb(text, maxLength = 160) {
+  const trimmed = text.trim();
+  return trimmed.length > maxLength ? `${trimmed.slice(0, maxLength - 1).trimEnd()}…` : trimmed;
+}
+
+/**
+ * applies the auto-alternating (default) or fixed layout classes shared by
+ * every promotion, whether its content came from authored fields or a
+ * fetched GraphQL item.
+ * @param {Element} block The promotion block element
+ * @param {string} style One of the promotion style values, or 'default'
+ */
+function applyStyle(block, style) {
+  block.dataset.promotionStyle = style;
+  if (style === 'default') {
+    const siblings = [...document.querySelectorAll('.promotion[data-promotion-style="default"]')];
+    if (siblings.indexOf(block) % 2 === 1) block.classList.add('promotion-reverse');
+  } else {
+    block.classList.add(`promotion-${style}`);
+  }
+}
+
+/**
+ * renders a promotion fetched from the persisted GraphQL query using the
+ * same .promotion-image / .promotion-text structure as authored promotions.
+ * @param {Element} block The promotion block element
+ * @param {Object} item The GraphQL content fragment item
+ * @param {string} style One of the promotion style values, or 'default'
+ */
+function renderFetchedPromotion(block, item, style) {
+  const aemHost = getGraphqlHost();
+  const showImage = style !== 'title-only' && style !== 'text-only';
+
+  // GraphQL's Content Fragment schema names these fields with a leading underscore
+  // eslint-disable-next-line no-underscore-dangle
+  const imagePath = item.featuredImage?._dynamicUrl || item.featuredImage?._path;
+  if (imagePath && showImage) {
+    const imageCol = document.createElement('div');
+    imageCol.className = 'promotion-image';
+    const img = document.createElement('img');
+    img.src = imagePath.startsWith('/') ? `${aemHost}${imagePath}` : imagePath;
+    img.alt = item.title || '';
+    img.loading = 'lazy';
+    imageCol.append(img);
+    block.append(imageCol);
+  }
+
+  const textCol = document.createElement('div');
+  textCol.className = 'promotion-text';
+  if (item.title) {
+    const titleEl = document.createElement('p');
+    titleEl.innerHTML = `<strong>${item.title}</strong>`;
+    textCol.append(titleEl);
+  }
+  if (style !== 'title-only' && item.main?.plaintext) {
+    const descriptionEl = document.createElement('p');
+    descriptionEl.textContent = trimBlurb(item.main.plaintext);
+    textCol.append(descriptionEl);
+  }
+  block.append(textCol);
+}
+
+/**
+ * fetches the persisted query for the given slug and renders the matching
+ * item into the block. runs after decorate() has already returned, so it
+ * never blocks the page's section/block loading loop while the network
+ * requests are in flight.
+ * @param {Element} block The promotion block element
+ * @param {string} slug The "slug" field value identifying which item to render
+ * @param {string} style One of the promotion style values, or 'default'
+ */
+async function loadPromotion(block, slug, style) {
+  const aemHost = getGraphqlHost();
+
+  let items = [];
+  try {
+    const url = `${aemHost}/graphql/execute.json/${GRAPHQL_QUERY_PATH};slug=${encodeURIComponent(slug)}`;
+    const res = await fetch(url, { credentials: 'include' });
+    if (!res.ok) throw new Error(`GraphQL request failed: ${res.status}`);
+    const json = await res.json();
+    if (json.errors) throw new Error(`GraphQL errors: ${JSON.stringify(json.errors)}`);
+    items = Object.values(json?.data || {})[0]?.items || [];
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('promotion: failed to load GraphQL data', error);
+    return;
+  }
+
+  const item = items[0];
+  if (!item) {
+    // eslint-disable-next-line no-console
+    console.error(`promotion: no item found with slug "${slug}"`);
+    return;
+  }
+
+  renderFetchedPromotion(block, item, style);
+}
 
 /**
  * loads and decorates the promotion: an image + text + button banner with a
  * choice of layout styles. Left empty, "default" style automatically
  * alternates which side the image sits on for consecutive default-style
  * promotions, so authors can just stack them; any other style is applied
- * as authored, with no alternation.
+ * as authored, with no alternation. If a slug is authored, the promotion's
+ * content is fetched from a public GraphQL persisted query instead, and the
+ * authored image/text fields are ignored.
  * @param {Element} block The promotion block element
  */
 export default function decorate(block) {
-  const [imageCell, textCell, styleCell] = block.children;
+  const [imageCell, textCell, styleCell, slugCell] = block.children;
 
   const styleValue = styleCell?.textContent.trim().toLowerCase();
   const style = STYLES.includes(styleValue) ? styleValue : 'default';
-  block.dataset.promotionStyle = style;
+  const slug = slugCell?.textContent.trim();
 
-  if (style === 'default') {
-    const siblings = [...document.querySelectorAll('.promotion[data-promotion-style="default"]')];
-    if (siblings.indexOf(block) % 2 === 1) block.classList.add('promotion-reverse');
-  } else {
-    block.classList.add(`promotion-${style}`);
+  applyStyle(block, style);
+
+  if (slug) {
+    block.textContent = '';
+    loadPromotion(block, slug, style);
+    return;
   }
 
   const showImage = style !== 'title-only' && style !== 'text-only';
@@ -48,6 +151,7 @@ export default function decorate(block) {
   moveInstrumentation(textCell, textCol);
 
   if (styleCell) styleCell.remove();
+  if (slugCell) slugCell.remove();
 
   block.textContent = '';
   block.append(...(showImage ? [imageCol, textCol] : [textCol]));

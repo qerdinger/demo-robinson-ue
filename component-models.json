@@ -316,50 +316,6 @@
     ]
   },
   {
-    "id": "promotion-cf",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "slug",
-        "label": "Slug — matches one item's \"slug\" field from the persisted query"
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "style",
-        "value": "",
-        "label": "Style",
-        "options": [
-          {
-            "name": "Default (auto-alternates sides)",
-            "value": ""
-          },
-          {
-            "name": "Image Left / Info Right",
-            "value": "image-left"
-          },
-          {
-            "name": "Image Right / Info Left",
-            "value": "image-right"
-          },
-          {
-            "name": "Image Background",
-            "value": "image-background"
-          },
-          {
-            "name": "Title Only",
-            "value": "title-only"
-          },
-          {
-            "name": "Text Only",
-            "value": "text-only"
-          }
-        ]
-      }
-    ]
-  },
-  {
     "id": "promotion",
     "fields": [
       {
@@ -413,44 +369,12 @@
             "value": "text-only"
           }
         ]
-      }
-    ]
-  },
-  {
-    "id": "promotions-cf",
-    "fields": [
+      },
       {
-        "component": "select",
+        "component": "text",
         "valueType": "string",
-        "name": "style",
-        "value": "",
-        "label": "Style — applies to every card",
-        "options": [
-          {
-            "name": "Default (auto-alternates sides)",
-            "value": ""
-          },
-          {
-            "name": "Image Left / Info Right",
-            "value": "image-left"
-          },
-          {
-            "name": "Image Right / Info Left",
-            "value": "image-right"
-          },
-          {
-            "name": "Image Background",
-            "value": "image-background"
-          },
-          {
-            "name": "Title Only",
-            "value": "title-only"
-          },
-          {
-            "name": "Text Only",
-            "value": "text-only"
-          }
-        ]
+        "name": "slug",
+        "label": "Slug (optional) — if set, fetches that item from the persisted GraphQL query instead of the fields above"
       }
     ]
   },
