@@ -1,3 +1,5 @@
+import getGraphqlHost from '../../scripts/graphql-host.js';
+
 const STYLES = ['image-left', 'image-right', 'image-background', 'title-only', 'text-only'];
 const GRAPHQL_QUERY_PATH = 'Robinson/promotion-by-slug';
 
@@ -6,31 +8,15 @@ function trimBlurb(text, maxLength = 160) {
   return trimmed.length > maxLength ? `${trimmed.slice(0, maxLength - 1).trimEnd()}…` : trimmed;
 }
 
-// plain <img> tags can't carry the Authorization header, so once the page is published
-// (viewed without an authenticated author session cookie) a direct <img src> to the author
-// host 401s; fetching the binary with the same header and pointing <img> at a blob URL works
-// in both cases
-async function fetchAuthenticatedImageUrl(url, headers) {
-  try {
-    const res = await fetch(url, { headers });
-    if (!res.ok) return null;
-    const blob = await res.blob();
-    return URL.createObjectURL(blob);
-  } catch {
-    return null;
-  }
-}
-
 /**
  * renders the fetched promotion using the same .promotion / .promotion-image /
  * .promotion-text structure and style classes as the promotion block, so a
  * promotion-cf block looks and behaves identically.
  * @param {Object} item The GraphQL content fragment item
- * @param {Object} headers Auth headers to fetch the image with, if any
  * @param {string} aemHost The AEM host images are served from
  * @param {string} style One of the promotion style values, or 'default'
  */
-async function renderPromotion(item, headers, aemHost, style) {
+function renderPromotion(item, aemHost, style) {
   const block = document.createElement('div');
   block.className = 'promotion';
 
@@ -42,18 +28,14 @@ async function renderPromotion(item, headers, aemHost, style) {
   // eslint-disable-next-line no-underscore-dangle
   const imagePath = item.featuredImage?._dynamicUrl || item.featuredImage?._path;
   if (imagePath && showImage) {
-    const imageUrl = imagePath.startsWith('/') ? `${aemHost}${imagePath}` : imagePath;
-    const blobUrl = await fetchAuthenticatedImageUrl(imageUrl, headers);
-    if (blobUrl) {
-      const imageCol = document.createElement('div');
-      imageCol.className = 'promotion-image';
-      const img = document.createElement('img');
-      img.src = blobUrl;
-      img.alt = item.title || '';
-      img.loading = 'lazy';
-      imageCol.append(img);
-      block.append(imageCol);
-    }
+    const imageCol = document.createElement('div');
+    imageCol.className = 'promotion-image';
+    const img = document.createElement('img');
+    img.src = imagePath.startsWith('/') ? `${aemHost}${imagePath}` : imagePath;
+    img.alt = item.title || '';
+    img.loading = 'lazy';
+    imageCol.append(img);
+    block.append(imageCol);
   }
 
   const textCol = document.createElement('div');
@@ -79,18 +61,16 @@ async function renderPromotion(item, headers, aemHost, style) {
  * blocks the page's section/block loading loop while the network requests
  * are in flight.
  * @param {Element} block The promotion-cf block element
- * @param {string} aemHost The AEM host to query and fetch images from
  * @param {string} slug The "slug" field value identifying which item to render
- * @param {string} accessToken Optional bearer token for the query and images
  * @param {string} style One of the promotion style values, or 'default'
  */
-async function loadPromotion(block, aemHost, slug, accessToken, style) {
-  const headers = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
+async function loadPromotion(block, slug, style) {
+  const aemHost = getGraphqlHost();
 
   let items = [];
   try {
     const url = `${aemHost}/graphql/execute.json/${GRAPHQL_QUERY_PATH};slug=${encodeURIComponent(slug)}`;
-    const res = await fetch(url, { headers });
+    const res = await fetch(url, { credentials: 'include' });
     if (!res.ok) throw new Error(`GraphQL request failed: ${res.status}`);
     const json = await res.json();
     if (json.errors) throw new Error(`GraphQL errors: ${JSON.stringify(json.errors)}`);
@@ -108,7 +88,7 @@ async function loadPromotion(block, aemHost, slug, accessToken, style) {
     return;
   }
 
-  block.append(await renderPromotion(item, headers, aemHost, style));
+  block.append(renderPromotion(item, aemHost, style));
 }
 
 /**
@@ -118,16 +98,14 @@ async function loadPromotion(block, aemHost, slug, accessToken, style) {
  * @param {Element} block The promotion-cf block element
  */
 export default function decorate(block) {
-  const [aemHostDiv, slugDiv, accessTokenDiv, styleDiv] = block.children;
-  const aemHost = aemHostDiv?.textContent.trim();
+  const [slugDiv, styleDiv] = block.children;
   const slug = slugDiv?.textContent.trim();
-  const accessToken = accessTokenDiv?.textContent.trim();
   const styleValue = styleDiv?.textContent.trim().toLowerCase();
   const style = STYLES.includes(styleValue) ? styleValue : 'default';
 
   block.textContent = '';
 
-  if (!aemHost || !slug) return;
+  if (!slug) return;
 
-  loadPromotion(block, aemHost, slug, accessToken, style);
+  loadPromotion(block, slug, style);
 }
