@@ -78,23 +78,16 @@ async function renderPromotion(item, headers, aemHost, style, index) {
 }
 
 /**
- * loads and decorates the promotions-cf block: fetches its cards from a public
- * GraphQL persisted query instead of authored block items, and renders them
- * using the same look as the promotion block.
+ * fetches the persisted query and appends the rendered promotions to the block.
+ * runs after decorate() has already returned, so it never blocks the
+ * page's section/block loading loop while the network requests are in flight.
  * @param {Element} block The promotions-cf block element
+ * @param {string} aemHost The AEM host to query and fetch images from
+ * @param {string} queryPath The GraphQL persisted query path
+ * @param {string} accessToken Optional bearer token for the query and images
+ * @param {string} style One of the promotion style values, or 'default'
  */
-export default async function decorate(block) {
-  const [aemHostDiv, queryPathDiv, accessTokenDiv, styleDiv] = block.children;
-  const aemHost = aemHostDiv?.textContent.trim();
-  const queryPath = queryPathDiv?.textContent.trim();
-  const accessToken = accessTokenDiv?.textContent.trim();
-  const styleValue = styleDiv?.textContent.trim().toLowerCase();
-  const style = STYLES.includes(styleValue) ? styleValue : 'default';
-
-  block.textContent = '';
-
-  if (!aemHost || !queryPath) return;
-
+async function loadPromotions(block, aemHost, queryPath, accessToken, style) {
   const headers = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
 
   let items = [];
@@ -114,4 +107,25 @@ export default async function decorate(block) {
     items.map((item, index) => renderPromotion(item, headers, aemHost, style, index)),
   );
   block.append(...promotions);
+}
+
+/**
+ * loads and decorates the promotions-cf block: fetches its cards from a public
+ * GraphQL persisted query instead of authored block items, and renders them
+ * using the same look as the promotion block.
+ * @param {Element} block The promotions-cf block element
+ */
+export default function decorate(block) {
+  const [aemHostDiv, queryPathDiv, accessTokenDiv, styleDiv] = block.children;
+  const aemHost = aemHostDiv?.textContent.trim();
+  const queryPath = queryPathDiv?.textContent.trim();
+  const accessToken = accessTokenDiv?.textContent.trim();
+  const styleValue = styleDiv?.textContent.trim().toLowerCase();
+  const style = STYLES.includes(styleValue) ? styleValue : 'default';
+
+  block.textContent = '';
+
+  if (!aemHost || !queryPath) return;
+
+  loadPromotions(block, aemHost, queryPath, accessToken, style);
 }
