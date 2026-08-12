@@ -328,13 +328,6 @@
       {
         "component": "text",
         "valueType": "string",
-        "name": "graphqlQueryPath",
-        "label": "GraphQL Persisted Query Path",
-        "value": "Robinson/promotion-by-slug"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
         "name": "slug",
         "label": "Slug — matches one item's \"slug\" field from the persisted query"
       },

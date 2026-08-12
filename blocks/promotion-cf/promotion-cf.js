@@ -1,4 +1,5 @@
 const STYLES = ['image-left', 'image-right', 'image-background', 'title-only', 'text-only'];
+const GRAPHQL_QUERY_PATH = 'Robinson/promotion-by-slug';
 
 function trimBlurb(text, maxLength = 160) {
   const trimmed = text.trim();
@@ -73,23 +74,23 @@ async function renderPromotion(item, headers, aemHost, style) {
 }
 
 /**
- * fetches the persisted query, finds the item matching the given slug, and
- * appends it to the block. runs after decorate() has already returned, so it
- * never blocks the page's section/block loading loop while the network
- * requests are in flight.
+ * fetches the persisted query for the given slug and appends the matching
+ * item to the block. runs after decorate() has already returned, so it never
+ * blocks the page's section/block loading loop while the network requests
+ * are in flight.
  * @param {Element} block The promotion-cf block element
  * @param {string} aemHost The AEM host to query and fetch images from
- * @param {string} queryPath The GraphQL persisted query path
  * @param {string} slug The "slug" field value identifying which item to render
  * @param {string} accessToken Optional bearer token for the query and images
  * @param {string} style One of the promotion style values, or 'default'
  */
-async function loadPromotion(block, aemHost, queryPath, slug, accessToken, style) {
+async function loadPromotion(block, aemHost, slug, accessToken, style) {
   const headers = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
 
   let items = [];
   try {
-    const res = await fetch(`${aemHost}/graphql/execute.json/${queryPath}`, { headers });
+    const url = `${aemHost}/graphql/execute.json/${GRAPHQL_QUERY_PATH};slug=${encodeURIComponent(slug)}`;
+    const res = await fetch(url, { headers });
     if (!res.ok) throw new Error(`GraphQL request failed: ${res.status}`);
     const json = await res.json();
     if (json.errors) throw new Error(`GraphQL errors: ${JSON.stringify(json.errors)}`);
@@ -100,7 +101,7 @@ async function loadPromotion(block, aemHost, queryPath, slug, accessToken, style
     return;
   }
 
-  const item = items.find((candidate) => candidate.slug === slug);
+  const item = items[0];
   if (!item) {
     // eslint-disable-next-line no-console
     console.error(`promotion-cf: no item found with slug "${slug}"`);
@@ -117,9 +118,8 @@ async function loadPromotion(block, aemHost, queryPath, slug, accessToken, style
  * @param {Element} block The promotion-cf block element
  */
 export default function decorate(block) {
-  const [aemHostDiv, queryPathDiv, slugDiv, accessTokenDiv, styleDiv] = block.children;
+  const [aemHostDiv, slugDiv, accessTokenDiv, styleDiv] = block.children;
   const aemHost = aemHostDiv?.textContent.trim();
-  const queryPath = queryPathDiv?.textContent.trim();
   const slug = slugDiv?.textContent.trim();
   const accessToken = accessTokenDiv?.textContent.trim();
   const styleValue = styleDiv?.textContent.trim().toLowerCase();
@@ -127,7 +127,7 @@ export default function decorate(block) {
 
   block.textContent = '';
 
-  if (!aemHost || !queryPath || !slug) return;
+  if (!aemHost || !slug) return;
 
-  loadPromotion(block, aemHost, queryPath, slug, accessToken, style);
+  loadPromotion(block, aemHost, slug, accessToken, style);
 }
