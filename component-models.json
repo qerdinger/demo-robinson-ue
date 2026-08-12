@@ -316,6 +316,66 @@
     ]
   },
   {
+    "id": "promotion-cf",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "aemHost",
+        "label": "AEM Host",
+        "value": "https://author-p151412-e1619656.adobeaemcloud.com"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "graphqlQueryPath",
+        "label": "GraphQL Persisted Query Path",
+        "value": "Robinson/promotions-list"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "slug",
+        "label": "Slug — matches one item's \"slug\" field from the persisted query"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "accessToken",
+        "label": "Access Token"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "style",
+        "value": "",
+        "label": "Style",
+        "options": [
+          {
+            "name": "Default (auto-alternates sides)",
+            "value": ""
+          },
+          {
+            "name": "Image Left / Info Right",
+            "value": "image-left"
+          },
+          {
+            "name": "Image Background",
+            "value": "image-background"
+          },
+          {
+            "name": "Title Only",
+            "value": "title-only"
+          },
+          {
+            "name": "Text Only",
+            "value": "text-only"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "promotion",
     "fields": [
       {
