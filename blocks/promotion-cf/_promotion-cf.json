@@ -32,7 +32,7 @@
           "valueType": "string",
           "name": "graphqlQueryPath",
           "label": "GraphQL Persisted Query Path",
-          "value": "Robinson/promotions-list"
+          "value": "Robinson/promotion-by-slug"
         },
         {
           "component": "text",
