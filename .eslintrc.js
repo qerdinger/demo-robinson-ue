@@ -18,6 +18,6 @@ module.exports = {
     'import/extensions': ['error', { js: 'always' }], // require js file extensions in imports
     'linebreak-style': ['error', 'unix'], // enforce unix linebreaks
     'no-param-reassign': [2, { props: false }], // allow modifying properties of param
-    'xwalk/max-cells': ['error', { '*': 4, 'promotion-cf': 5 }], // promotion-cf's 5 fields are independent config values with no semantic pairing to collapse
+    'xwalk/max-cells': ['error', { '*': 4, promotion: 6 }], // promotion's style/startDate/endDate/promotionPath fields are independent config values with no semantic pairing to collapse
   },
 };

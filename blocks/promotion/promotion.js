@@ -10,6 +10,37 @@ function trimBlurb(text, maxLength = 160) {
   return trimmed.length > maxLength ? `${trimmed.slice(0, maxLength - 1).trimEnd()}…` : trimmed;
 }
 
+// parses a "YYYY-MM-DD" (or "YYYY-MM-DDT...") date string into a locale-formatted string,
+// building the Date from its year/month/day components directly rather than handing the raw
+// string to `new Date()` — the latter parses a plain date as UTC midnight, which can shift
+// the displayed day backward by one in negative-UTC-offset timezones
+function formatDate(dateString) {
+  const [year, month, day] = dateString.split('T')[0].split('-').map(Number);
+  return new Date(year, month - 1, day).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+}
+
+// formats a start/end date pair (either may be omitted) into a single display string, e.g.
+// "Aug 2, 2026 – Aug 31, 2026", or just one side if only one date is set
+function formatDateRange(startDate, endDate) {
+  if (startDate && endDate) return `${formatDate(startDate)} – ${formatDate(endDate)}`;
+  if (startDate) return formatDate(startDate);
+  if (endDate) return formatDate(endDate);
+  return '';
+}
+
+function appendDates(textCol, startDate, endDate) {
+  const dateRange = formatDateRange(startDate, endDate);
+  if (!dateRange) return;
+  const datesEl = document.createElement('p');
+  datesEl.className = 'promotion-dates';
+  datesEl.textContent = dateRange;
+  textCol.append(datesEl);
+}
+
 /**
  * applies the auto-alternating (default) or fixed layout classes shared by
  * every promotion, whether its content came from authored fields or a
@@ -31,7 +62,8 @@ function applyStyle(block, style) {
  * renders a promotion fetched from the persisted GraphQL query using the
  * same .promotion-image / .promotion-text structure as authored promotions.
  * @param {Element} block The promotion block element
- * @param {Object} item The GraphQL content fragment item
+ * @param {Object} item The GraphQL content fragment item (title, main, featuredImage,
+ * startDate, endDate)
  * @param {string} style One of the promotion style values, or 'default'
  */
 function renderFetchedPromotion(block, item, style) {
@@ -64,6 +96,7 @@ function renderFetchedPromotion(block, item, style) {
     descriptionEl.textContent = trimBlurb(item.main.plaintext);
     textCol.append(descriptionEl);
   }
+  if (style !== 'title-only') appendDates(textCol, item.startDate, item.endDate);
   block.append(textCol);
 }
 
@@ -113,10 +146,14 @@ async function loadPromotion(block, promotionPath, style) {
  * @param {Element} block The promotion block element
  */
 export default function decorate(block) {
-  const [imageCell, textCell, styleCell, promotionPathCell] = block.children;
+  const [
+    imageCell, textCell, styleCell, startDateCell, endDateCell, promotionPathCell,
+  ] = block.children;
 
   const styleValue = styleCell?.textContent.trim().toLowerCase();
   const style = STYLES.includes(styleValue) ? styleValue : 'default';
+  const startDate = startDateCell?.textContent.trim();
+  const endDate = endDateCell?.textContent.trim();
   const promotionPath = promotionPathCell?.textContent.trim();
 
   applyStyle(block, style);
@@ -148,8 +185,11 @@ export default function decorate(block) {
     textCol.append(...textCell.children);
   }
   moveInstrumentation(textCell, textCol);
+  if (style !== 'title-only') appendDates(textCol, startDate, endDate);
 
   if (styleCell) styleCell.remove();
+  if (startDateCell) startDateCell.remove();
+  if (endDateCell) endDateCell.remove();
   if (promotionPathCell) promotionPathCell.remove();
 
   block.textContent = '';

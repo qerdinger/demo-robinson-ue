@@ -371,6 +371,18 @@
         ]
       },
       {
+        "component": "date-time",
+        "valueType": "date",
+        "name": "startDate",
+        "label": "Start Date"
+      },
+      {
+        "component": "date-time",
+        "valueType": "date",
+        "name": "endDate",
+        "label": "End Date"
+      },
+      {
         "component": "aem-content-fragment",
         "valueType": "string",
         "name": "promotionPath",

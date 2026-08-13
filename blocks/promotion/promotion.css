@@ -37,6 +37,12 @@
   margin-top: 24px;
 }
 
+.promotion-dates {
+  margin-top: 8px;
+  color: var(--dark-color);
+  font-size: 13px;
+}
+
 @media (width >= 600px) {
   .promotion {
     grid-template-columns: 1fr 1fr;
@@ -93,6 +99,10 @@
   border-color: #fff;
   background-color: #fff;
   color: var(--text-color);
+}
+
+.promotion-image-background .promotion-dates {
+  color: rgb(255 255 255 / 70%);
 }
 
 @media (width >= 600px) {
