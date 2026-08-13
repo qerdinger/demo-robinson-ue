@@ -134,7 +134,7 @@ async function loadPromotion(block, promotionPath, style) {
  */
 export default function decorate(block) {
   const [
-    imageCell, textCell, styleCell, startDateCell, endDateCell, promotionPathCell,
+    imageCell, textCell, startDateCell, endDateCell, promotionPathCell, styleCell,
   ] = block.children;
 
   const styleValue = styleCell?.textContent.trim().toLowerCase();
