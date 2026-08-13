@@ -376,7 +376,7 @@
         "name": "promotionPath",
         "label": "Promotion Content Fragment (optional)",
         "validation": {
-          "rootPath": "/content/dam/rrhi/promotions-cf"
+          "rootPath": "/content/dam/rrhi"
         }
       }
     ]
