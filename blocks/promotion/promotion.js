@@ -10,26 +10,13 @@ function trimBlurb(text, maxLength = 160) {
   return trimmed.length > maxLength ? `${trimmed.slice(0, maxLength - 1).trimEnd()}…` : trimmed;
 }
 
-// parses a "YYYY-MM-DD" (or "YYYY-MM-DDT...") date string into a locale-formatted string,
-// building the Date from its year/month/day components directly rather than handing the raw
-// string to `new Date()` — the latter parses a plain date as UTC midnight, which can shift
-// the displayed day backward by one in negative-UTC-offset timezones
-function formatDate(dateString) {
-  const [year, month, day] = dateString.split('T')[0].split('-').map(Number);
-  return new Date(year, month - 1, day).toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
-}
-
-// formats a start/end date pair (either may be omitted) into a single display string, e.g.
-// "Aug 2, 2026 – Aug 31, 2026", or just one side if only one date is set
+// joins a start/end date pair (either may be omitted) into a single display string, shown
+// exactly as authored/fetched with no reformatting — AEM's date-time field and the GraphQL
+// persisted query don't agree on a single date string shape, so converting through a parsed
+// Date risked silently rendering "Invalid Date" for whichever shape wasn't anticipated
 function formatDateRange(startDate, endDate) {
-  if (startDate && endDate) return `${formatDate(startDate)} – ${formatDate(endDate)}`;
-  if (startDate) return formatDate(startDate);
-  if (endDate) return formatDate(endDate);
-  return '';
+  if (startDate && endDate) return `${startDate} – ${endDate}`;
+  return startDate || endDate || '';
 }
 
 function appendDates(textCol, startDate, endDate) {
