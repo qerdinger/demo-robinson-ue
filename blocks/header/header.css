@@ -371,10 +371,15 @@ header nav .nav-sections a:hover {
     padding: 0 32px;
   }
 
+  /* the bar itself is centered on the page via the wrapper's max-width +
+     margin: auto above; within it, more items than fit on one line wrap
+     onto additional rows that stay left-aligned, starting from the same
+     left edge as the first row */
   header nav .nav-sections .default-content-wrapper > ul {
     display: flex;
     flex-wrap: wrap;
-    gap: 0;
+    justify-content: flex-start;
+    gap: 4px 0;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li {
@@ -383,6 +388,14 @@ header nav .nav-sections a:hover {
     color: var(--ssd-navy);
     font-size: 14px;
     white-space: nowrap;
+  }
+
+  /* the label text is decorated into a <p>, which is block-level by default
+     and pushes the ::after caret below it onto its own line; make it inline
+     so the caret stays on the same line as the text */
+  header nav .nav-sections .default-content-wrapper > ul > li > p {
+    display: inline;
+    margin: 0;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li:hover {
