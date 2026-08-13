@@ -374,7 +374,7 @@
         "component": "aem-content-fragment",
         "valueType": "string",
         "name": "promotionPath",
-        "label": "Promotion Content Fragment (optional)",
+        "label": "Promotion (Content Fragment) — optional; when set, takes over from the authored fields above",
         "validation": {
           "rootPath": "/content/dam/rrhi"
         }
