@@ -3,7 +3,7 @@ import { moveInstrumentation } from '../../scripts/scripts.js';
 import getGraphqlHost from '../../scripts/graphql-host.js';
 
 const STYLES = ['image-left', 'image-right', 'image-background', 'title-only', 'text-only'];
-const GRAPHQL_QUERY_PATH = 'Robinson/promotion-by-slug';
+const GRAPHQL_QUERY_PATH = 'Robinson/promotion-by-path';
 
 function trimBlurb(text, maxLength = 160) {
   const trimmed = text.trim();
@@ -68,35 +68,34 @@ function renderFetchedPromotion(block, item, style) {
 }
 
 /**
- * fetches the persisted query for the given slug and renders the matching
+ * fetches the persisted query for the selected Content Fragment path and renders the matching
  * item into the block. runs after decorate() has already returned, so it
  * never blocks the page's section/block loading loop while the network
  * requests are in flight.
  * @param {Element} block The promotion block element
- * @param {string} slug The "slug" field value identifying which item to render
+ * @param {string} promotionPath The AEM asset path identifying which item to render
  * @param {string} style One of the promotion style values, or 'default'
  */
-async function loadPromotion(block, slug, style) {
+async function loadPromotion(block, promotionPath, style) {
   const aemHost = getGraphqlHost();
 
-  let items = [];
+  let item;
   try {
-    const url = `${aemHost}/graphql/execute.json/${GRAPHQL_QUERY_PATH};slug=${encodeURIComponent(slug)}`;
+    const url = `${aemHost}/graphql/execute.json/${GRAPHQL_QUERY_PATH};promotionPath=${promotionPath}`;
     const res = await fetch(url, { credentials: 'include' });
     if (!res.ok) throw new Error(`GraphQL request failed: ${res.status}`);
     const json = await res.json();
     if (json.errors) throw new Error(`GraphQL errors: ${JSON.stringify(json.errors)}`);
-    items = Object.values(json?.data || {})[0]?.items || [];
+    item = Object.values(json?.data || {})[0]?.item;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('promotion: failed to load GraphQL data', error);
     return;
   }
 
-  const item = items[0];
   if (!item) {
     // eslint-disable-next-line no-console
-    console.error(`promotion: no item found with slug "${slug}"`);
+    console.error(`promotion: no item found at path "${promotionPath}"`);
     return;
   }
 
@@ -108,23 +107,23 @@ async function loadPromotion(block, slug, style) {
  * choice of layout styles. Left empty, "default" style automatically
  * alternates which side the image sits on for consecutive default-style
  * promotions, so authors can just stack them; any other style is applied
- * as authored, with no alternation. If a slug is authored, the promotion's
- * content is fetched from a public GraphQL persisted query instead, and the
- * authored image/text fields are ignored.
+ * as authored, with no alternation. If a Content Fragment path is authored,
+ * the promotion's content is fetched from a public GraphQL persisted query
+ * instead, and the authored image/text fields are ignored.
  * @param {Element} block The promotion block element
  */
 export default function decorate(block) {
-  const [imageCell, textCell, styleCell, slugCell] = block.children;
+  const [imageCell, textCell, styleCell, promotionPathCell] = block.children;
 
   const styleValue = styleCell?.textContent.trim().toLowerCase();
   const style = STYLES.includes(styleValue) ? styleValue : 'default';
-  const slug = slugCell?.textContent.trim();
+  const promotionPath = promotionPathCell?.textContent.trim();
 
   applyStyle(block, style);
 
-  if (slug) {
+  if (promotionPath) {
     block.textContent = '';
-    loadPromotion(block, slug, style);
+    loadPromotion(block, promotionPath, style);
     return;
   }
 
@@ -151,7 +150,7 @@ export default function decorate(block) {
   moveInstrumentation(textCell, textCol);
 
   if (styleCell) styleCell.remove();
-  if (slugCell) slugCell.remove();
+  if (promotionPathCell) promotionPathCell.remove();
 
   block.textContent = '';
   block.append(...(showImage ? [imageCol, textCol] : [textCol]));

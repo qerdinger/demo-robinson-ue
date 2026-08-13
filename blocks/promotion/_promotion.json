@@ -73,10 +73,13 @@
           ]
         },
         {
-          "component": "text",
+          "component": "aem-content-fragment",
           "valueType": "string",
-          "name": "slug",
-          "label": "Slug (optional) — if set, fetches that item from the persisted GraphQL query instead of the fields above"
+          "name": "promotionPath",
+          "label": "Promotion Content Fragment (optional)",
+          "validation": {
+            "rootPath": "/content/dam/rrhi/promotions-cf"
+          }
         }
       ]
     }
