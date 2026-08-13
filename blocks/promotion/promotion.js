@@ -1,5 +1,3 @@
-import { createOptimizedPicture } from '../../scripts/aem.js';
-import { moveInstrumentation } from '../../scripts/scripts.js';
 import getGraphqlHost from '../../scripts/graphql-host.js';
 
 const STYLES = ['image-left', 'image-right', 'image-background', 'title-only', 'text-only'];
@@ -123,62 +121,21 @@ async function loadPromotion(block, promotionPath, style) {
 }
 
 /**
- * loads and decorates the promotion: an image + text + button banner with a
- * choice of layout styles. Left empty, "default" style automatically
- * alternates which side the image sits on for consecutive default-style
- * promotions, so authors can just stack them; any other style is applied
- * as authored, with no alternation. If a Content Fragment path is authored,
- * the promotion's content is fetched from a public GraphQL persisted query
- * instead, and the authored image/text fields are ignored.
+ * loads and decorates the promotion: fetches a single card from a public GraphQL persisted
+ * query, matched by a Content Fragment reference picked in Universal Editor, with a choice
+ * of layout styles. Left empty, "default" style automatically alternates which side the
+ * image sits on for consecutive default-style promotions, so authors can just stack them.
  * @param {Element} block The promotion block element
  */
 export default function decorate(block) {
-  const [
-    imageCell, textCell, startDateCell, endDateCell, promotionPathCell, styleCell,
-  ] = block.children;
+  const [promotionPathCell, styleCell] = block.children;
 
   const styleValue = styleCell?.textContent.trim().toLowerCase();
   const style = STYLES.includes(styleValue) ? styleValue : 'default';
-  const startDate = startDateCell?.textContent.trim();
-  const endDate = endDateCell?.textContent.trim();
   const promotionPath = promotionPathCell?.textContent.trim();
 
   applyStyle(block, style);
 
-  if (promotionPath) {
-    block.textContent = '';
-    loadPromotion(block, promotionPath, style);
-    return;
-  }
-
-  const showImage = style !== 'title-only' && style !== 'text-only';
-
-  const imageCol = document.createElement('div');
-  imageCol.className = 'promotion-image';
-  const img = imageCell.querySelector('img');
-  if (img && showImage) {
-    const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [{ width: '800' }]);
-    moveInstrumentation(img, optimizedPic.querySelector('img'));
-    imageCol.append(optimizedPic);
-  }
-  moveInstrumentation(imageCell, imageCol);
-
-  const textCol = document.createElement('div');
-  textCol.className = 'promotion-text';
-  if (style === 'title-only') {
-    const [firstLine] = textCell.children;
-    if (firstLine) textCol.append(firstLine);
-  } else {
-    textCol.append(...textCell.children);
-  }
-  moveInstrumentation(textCell, textCol);
-  if (style !== 'title-only') appendDates(textCol, startDate, endDate);
-
-  if (styleCell) styleCell.remove();
-  if (startDateCell) startDateCell.remove();
-  if (endDateCell) endDateCell.remove();
-  if (promotionPathCell) promotionPathCell.remove();
-
   block.textContent = '';
-  block.append(...(showImage ? [imageCol, textCol] : [textCol]));
+  if (promotionPath) loadPromotion(block, promotionPath, style);
 }
